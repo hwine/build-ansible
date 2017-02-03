@@ -13,6 +13,13 @@
         when:
             action == "stop"
 
+      - name: Restart selfserve_agents
+        supervisorctl:
+          name: selfserve-agent
+          state: restarted
+        when:
+            action == "restart"
+
       - name: Start selfserve_agents
         supervisorctl:
           name: selfserve-agent
@@ -33,9 +40,10 @@
           action == "status"
 
       - name: Usage error
-        fail: msg="Specify an action of start, stop, status via -e"
+        fail: msg="Specify an action of start, stop, restart, status via -e"
         when:
+          - action != "restart"
           - action != "start"
-          - action != "stop"
           - action != "status"
+          - action != "stop"
 
